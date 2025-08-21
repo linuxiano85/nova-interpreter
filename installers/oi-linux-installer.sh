@@ -27,11 +27,10 @@ $pyenv_root init
 $pyenv_root install $python_version --skip-existing
 $pyenv_root shell $python_version
 
-$pyenv_root exec pip install open-interpreter --break-system-packages
-# Unset the Python version
-$pyenv_root shell --unset
+$pyenv_root exec pip install "open-interpreter[nova-prime]" --break-system-packages
 
 echo ""
-echo "Open Interpreter has been installed. Run the following command to use it: "
+echo "Open Interpreter + Nova Prime has been installed. Run the following commands:"
 echo ""
-echo "interpreter"
+echo "  interpreter   # Classic CLI interface"
+echo "  nova-prime    # Desktop assistant with voice ('hey nova')"

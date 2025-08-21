@@ -1,0 +1,13 @@
+{
+  "app.name": "Nova Prime",
+  "tray.title": "Nova Prime",
+  "tray.listen_on": "Listening: on",
+  "tray.listen_off": "Listening: off",
+  "tray.toggle_listen": "Toggle listening",
+  "tray.open": "Open Nova Prime",
+  "tray.quit": "Quit",
+  "status.ready": "Ready. Say \"hey nova\" or use the hotkey.",
+  "status.listening": "Listening...",
+  "status.thinking": "Thinking...",
+  "status.speaking": "Speaking..."
+}
