@@ -155,6 +155,12 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Show status information and exit"
     )
     
+    parser.add_argument(
+        "--doctor",
+        action="store_true",
+        help="Run diagnostics and show system health (doctor mode)"
+    )
+    
     return parser
 
 
@@ -188,6 +194,143 @@ def show_status(voice_loop: VoiceLoop) -> None:
     print()
 
 
+def run_doctor(voice_loop: VoiceLoop) -> int:
+    """Run doctor diagnostics and report system health."""
+    print("🩺 Nova Prime Doctor - System Health Check")
+    print("=" * 50)
+    print()
+    
+    # Check skills
+    print("📦 Skills Discovery:")
+    skills_info = voice_loop.skill_registry.get_skills_info()
+    
+    if skills_info:
+        print(f"  ✅ Found {len(skills_info)} skills:")
+        for skill_name, info in skills_info.items():
+            print(f"    • {skill_name}: {info['description']}")
+            print(f"      Intents: {', '.join(info['intents'])}")
+        print()
+    else:
+        print("  ❌ No skills found")
+        print()
+    
+    # Check providers
+    print("🔧 Provider Availability:")
+    
+    # Check hotword provider
+    try:
+        import openwakeword
+        print("  ✅ OpenWakeWord: Available")
+    except ImportError:
+        print("  ⚠️  OpenWakeWord: Not available (using mock)")
+    
+    # Check STT provider
+    try:
+        import faster_whisper
+        print("  ✅ Faster Whisper: Available")
+    except ImportError:
+        print("  ⚠️  Faster Whisper: Not available (using mock)")
+    
+    # Check TTS provider  
+    try:
+        import pyttsx3
+        print("  ✅ pyttsx3: Available")
+    except ImportError:
+        print("  ⚠️  pyttsx3: Not available (using mock)")
+    
+    print()
+    
+    # Check environment
+    print("🌍 Environment:")
+    import os
+    
+    mock_mode = (
+        os.getenv("NOVA_PRIME_MOCK", "").lower() in ("1", "true", "yes") or
+        os.getenv("NOVA_PRIME_NO_AUDIO", "").lower() in ("1", "true", "yes") or
+        os.getenv("CI", "").lower() in ("1", "true", "yes")
+    )
+    
+    if mock_mode:
+        print("  ℹ️  Mock mode: ENABLED (no real audio)")
+    else:
+        print("  ✅ Mock mode: Disabled (real audio available)")
+    
+    if os.getenv("CI"):
+        print("  ℹ️  CI Environment: Detected")
+    
+    print()
+    
+    # Check user skills directory
+    print("📁 User Skills Directory:")
+    import platformdirs
+    from pathlib import Path
+    
+    config_dir = Path(platformdirs.user_config_dir("Nova Prime"))
+    skills_dir = config_dir / "skills"
+    
+    print(f"  📍 Location: {skills_dir}")
+    
+    if skills_dir.exists():
+        user_skills = list(skills_dir.glob("*.py"))
+        if user_skills:
+            print(f"  ✅ Found {len(user_skills)} user skill files:")
+            for skill_file in user_skills:
+                print(f"    • {skill_file.name}")
+        else:
+            print("  ℹ️  Directory exists but no skills found")
+    else:
+        print("  ℹ️  Directory does not exist (this is normal)")
+    
+    print()
+    
+    # Test basic functionality
+    print("🧪 Basic Functionality Test:")
+    try:
+        result = voice_loop.process_single_utterance("apri calcolatrice")
+        if result["success"]:
+            print("  ✅ Intent routing: Working")
+            print(f"    Intent: {result['intent']}")
+            print(f"    Skill: {result.get('skill_data', {}).get('action', 'N/A')}")
+        else:
+            print("  ❌ Intent routing: Failed")
+            print(f"    Error: {result['message']}")
+    except Exception as e:
+        print(f"  ❌ Basic test failed: {e}")
+    
+    print()
+    
+    # Overall health
+    print("🏥 Overall Health:")
+    
+    # Count issues
+    issues = 0
+    
+    if not skills_info:
+        issues += 1
+        print("  ❌ No skills loaded")
+    
+    if mock_mode and not os.getenv("CI"):
+        print("  ⚠️  Running in mock mode outside CI")
+    
+    try:
+        result = voice_loop.process_single_utterance("test")
+        if not result["success"] and "No intent found" not in result["message"]:
+            issues += 1
+    except Exception:
+        issues += 1
+        print("  ❌ Basic functionality test failed")
+    
+    if issues == 0:
+        print("  🎉 All systems operational!")
+        return 0
+    elif issues == 1:
+        print("  ⚠️  Minor issues detected")
+        return 0  # Still return 0 for CI compatibility
+    else:
+        print("  ❌ Multiple issues detected")
+        return 1
+
+
 def main() -> int:
     """Main entry point for nova-prime-listen CLI."""
     parser = setup_parser()
@@ -213,6 +356,9 @@ def main() -> int:
         if args.status:
             show_status(voice_loop)
             return 0
+        
+        if args.doctor:
+            return run_doctor(voice_loop)
         
         # Test utterance mode
         if args.test_utterance:
