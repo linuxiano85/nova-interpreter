@@ -95,6 +95,7 @@ i = "interpreter.terminal_interface.start_terminal_interface:main"
 interpreter = "interpreter.terminal_interface.start_terminal_interface:main"
 wtf = "scripts.wtf:main"
 interpreter-classic = "interpreter.terminal_interface.start_terminal_interface:main"
+nova-prime-listen = "nova_prime.cli.listen:main"
 
 [tool.black]
 target-version = ['py311']
