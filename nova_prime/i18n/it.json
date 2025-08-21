@@ -1,0 +1,13 @@
+{
+  "app.name": "Nova Prime",
+  "tray.title": "Nova Prime",
+  "tray.listen_on": "Ascolto: attivo",
+  "tray.listen_off": "Ascolto: disattivo",
+  "tray.toggle_listen": "Attiva/Disattiva ascolto",
+  "tray.open": "Apri Nova Prime",
+  "tray.quit": "Esci",
+  "status.ready": "Pronto. Di' \"hey nova\" o usa la scorciatoia.",
+  "status.listening": "In ascolto...",
+  "status.thinking": "Sto pensando...",
+  "status.speaking": "Sto parlando..."
+}
