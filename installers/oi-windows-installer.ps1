@@ -29,14 +29,14 @@ if (!(Get-Command rustc -ErrorAction SilentlyContinue)) {
 & "$pyenvBin" init
 & "$pyenvBin" install 3.11.7 --skip-existing
 
-# Turn on this Python and install OI
+# Turn on this Python and install OI with nova-prime
 $env:PYENV_VERSION="3.11.7"
-& pip install open-interpreter
+& pip install "open-interpreter[nova-prime]"
 
 # Get us out of this vers of Python (which was just used to setup OI, which should stay in that vers of Python...?)
 Remove-Item Env:\PYENV_VERSION
 
 Write-Output ""
-Write-Output "Open Interpreter has been installed. Run the following command to use it: "
-Write-Output ""
-Write-Output "interpreter"
+Write-Output "Open Interpreter + Nova Prime has been installed. Run the following commands:"
+Write-Output "  interpreter   # Classic CLI interface"
+Write-Output "  nova-prime    # Desktop assistant with voice ('hey nova')"

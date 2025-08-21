@@ -4,7 +4,7 @@ $condaInstallerPath = "$env:TEMP\Miniconda3-latest-Windows-x86_64.exe"
 $condaPath = "$env:USERPROFILE\Miniconda3"
 $envName = "oi"
 $pythonVersion = "3.11.7"
-$packageName = "open-interpreter litellm openai"
+$packageName = "open-interpreter[nova-prime] litellm openai"
 $desktopPath = [System.IO.Path]::Combine([System.Environment]::GetFolderPath('Desktop'), 'Open Interpreter.lnk')
 $condaExePath = "$condaPath\Scripts\conda.exe"
 
@@ -95,7 +95,7 @@ $userEnvName = $envName
 
 # Create a shortcut on the desktop to activate the environment, install OpenInterpreter, and run it
 $targetPath = "$env:SystemRoot\System32\cmd.exe"
-$arguments = "/K `"$userCondaScriptsPath\activate.bat` $userEnvName && echo Updating Open Interpreter && pip install -U $packageName && cls && echo Launching Open Interpreter && interpreter`""
+$arguments = "/K `"$userCondaScriptsPath\activate.bat` $userEnvName && echo Updating Open Interpreter + Nova Prime && pip install -U $packageName && cls && echo Launching Open Interpreter (nova-prime also available) && interpreter`""
 
 $shell = New-Object -ComObject WScript.Shell
 $shortcut = $shell.CreateShortcut($desktopPath)

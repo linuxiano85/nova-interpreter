@@ -111,8 +111,9 @@ if [[ $installed_version != *"$python_version"* ]]; then
     exit 1
 fi
 
-# Use the specific Python version to install open-interpreter
-$pyenv_root exec python$python_version -m pip install open-interpreter
+# Use the specific Python version to install open-interpreter with nova-prime
+$pyenv_root exec python$python_version -m pip install "open-interpreter[nova-prime]"
 
-echo "Open Interpreter has been installed. Run the following command to use it:"
-echo "interpreter"
+echo "Open Interpreter + Nova Prime has been installed. Run the following commands:"
+echo "  interpreter   # Classic CLI interface"
+echo "  nova-prime    # Desktop assistant with voice ('hey nova')"
