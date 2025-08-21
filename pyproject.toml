@@ -3,6 +3,7 @@ name = "open-interpreter"
 packages = [
     {include = "interpreter"},
     {include = "scripts"},
+    {include = "nova_prime"},
 ]
 version = "0.4.3" # Use "-rc1", "-rc2", etc. for pre-release versions
 description = "Let language models run code"
@@ -95,6 +96,7 @@ i = "interpreter.terminal_interface.start_terminal_interface:main"
 interpreter = "interpreter.terminal_interface.start_terminal_interface:main"
 wtf = "scripts.wtf:main"
 interpreter-classic = "interpreter.terminal_interface.start_terminal_interface:main"
+nova-prime-doctor = "nova_prime.cli.doctor:main"
 
 [tool.black]
 target-version = ['py311']

@@ -1,0 +1,48 @@
+name: Bi-daily PR Summary
+
+on:
+  schedule:
+    - cron: "0 5 * * 1-5"  # ~07:00 Europe/Rome in summer (UTC+2)
+    - cron: "0 16 * * 1-5" # ~18:00 Europe/Rome in summer (UTC+2)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = 1; // Main work-in-progress PR
+            const sinceHours = 24;
+            const now = new Date();
+            const since = new Date(now.getTime() - sinceHours*60*60*1000);
+
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              per_page: 100
+            });
+
+            const recent = commits.filter(c => {
+              const d = new Date(c.commit.author?.date || c.commit.committer?.date || 0);
+              return d >= since;
+            });
+
+            const fmt = (c) => `- ${c.sha.substring(0,7)} ${c.commit.message.split("\\n")[0]}`;
+
+            const body = recent.length
+              ? `Riepilogo ultime 24h (${recent.length} commit):\n` + recent.map(fmt).join("\n")
+              : "Nessun nuovo commit nelle ultime 24h. Lavoro in corso o in preparazione.";
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body
+            });
