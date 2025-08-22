@@ -1,0 +1,43 @@
+---
+- name: automerge
+  color: "36c5f0"
+  description: Auto-merge when all required checks pass
+- name: do-not-merge
+  color: "b60205"
+  description: Prevent merges until manually cleared
+- name: blocked
+  color: "b60205"
+  description: Blocked; awaiting external dependency
+- name: priority:high
+  color: "b60205"
+  description: High priority
+- name: priority:medium
+  color: "d93f0b"
+  description: Medium priority
+- name: priority:low
+  color: "f9d0c4"
+  description: Low priority
+- name: docs
+  color: "006b75"
+  description: Documentation changes
+- name: tests
+  color: "5319e7"
+  description: Test-only changes
+- name: chore
+  color: "d4c5f9"
+  description: Maintenance and chores
+- name: feat
+  color: "0e8a16"
+  description: New feature
+- name: fix
+  color: "d73a4a"
+  description: Bug fix
+- name: refactor
+  color: "fbca04"
+  description: Refactoring
+- name: dependencies
+  color: "0366d6"
+  description: Dependency updates
+- name: security
+  color: "b60205"
+  description: Security-related changes

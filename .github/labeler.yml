@@ -1,0 +1,19 @@
+---
+docs:
+  - changed-files:
+      - any-glob-to-any-file: ["docs/**", "**/*.md"]
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "tests/**"
+          - "**/tests/**"
+          - "**/*_test.py"
+          - "**/test_*.py"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "pyproject.toml"
+          - "poetry.lock"
+          - "requirements*.txt"
